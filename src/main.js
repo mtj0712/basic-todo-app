@@ -36,7 +36,8 @@ function renderTodos() {
     todoListElement.appendChild(todoItem);
 
     const todoText = document.createElement("div");
-    todoText.classList.add("todo-text");
+    todoText.id = `todo-text-${todo.id}`;
+	todoText.classList.add("todo-text");
 	if (todo.completed) {
       todoText.classList.add("line-through");
     }
@@ -104,3 +105,29 @@ function renderTodoNavBar(href) {
     }
   }
 }
+
+// Function to toggle the completed status of a todo
+function handleClickOnTodoList(event) {
+  let todo = null;
+  if (event.target.id !== null && event.target.id.includes("todo-text")) {
+    todo = event.target;
+  }
+
+  let todoIdNumber = -1;
+  if (todo) {
+    const todoId = event.target.id.split("-").pop();
+    todoIdNumber = Number(todoId);
+  }
+
+  for (let i = 0; i < todos.length; i++) {
+    if (todos[i].id === todoIdNumber) {
+      todos[i].completed = !todos[i].completed;
+    }
+  }
+
+  // Re-render the app UI
+  renderTodos();
+}
+
+const todoListElement = document.getElementById("todo-list");
+todoListElement.addEventListener("click", handleClickOnTodoList);
